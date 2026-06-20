@@ -137,9 +137,7 @@
     </main>
 
     <!-- DETAILED MODAL -->
-    <!-- Thêm sự kiện onclick="closeModal()" cho lớp phủ bên ngoài -->
     <div id="detail-modal" onclick="closeModal()" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0 cursor-pointer">
-        <!-- Thêm onclick="event.stopPropagation()" để ngăn việc click vào nội dung bên trong làm đóng bảng -->
         <div onclick="event.stopPropagation()" class="bg-zinc-950 border border-zinc-850 w-full max-w-4xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-300 scale-95 cursor-default">
             <!-- Modal Header -->
             <div class="px-6 py-4 border-b border-zinc-850/80 flex items-center justify-between bg-zinc-900/30">
@@ -223,7 +221,8 @@
                 voice: "Miền Nam",
                 experience: "Model - Diễn viên - MC/VJ/Host - TVC - Review - Beauty",
                 links: [
-                    { label: "Link Diễn Xuất Tổng Hợp", url: "https://drive.google.com/drive/folders/18VTu_Prs89vS3i-L-KXO9jQx-QVRDZUB" }
+                    { label: "Link Diễn Xuất Tổng Hợp 1", url: "https://drive.google.com/drive/folders/18VTu_Prs89vS3i-L-KXO9jQx-QVRDZUB" },
+                    { label: "Link Diễn Xuất Tổng Hợp 2", url: "https://drive.google.com/drive/folders/1gIGLFByT7ZYDcJl7-97QMD7oMW24faRT" }
                 ]
             },
             {
@@ -233,8 +232,7 @@
                 avatarGradient: "from-amber-500 to-orange-600",
                 description: "Ngoại hình sang trọng, phù hợp với các dòng sản phẩm thời trang, trang sức cao cấp và mỹ phẩm.",
                 links: [
-                    { label: "Drive Thư Mục 1 (Cơ bản)", url: "https://drive.google.com/drive/folders/10AogvbfEZVkaiCpvq_A7Fl7d4oloFFyb?usp=drive_link" },
-                    { label: "Drive Thư Mục 2 (Nâng cao)", url: "https://drive.google.com/drive/folders/1gIGLFByT7ZYDcJl7-97QMD7oMW24faRT" }
+                    { label: "Drive Thư Mục", url: "https://drive.google.com/drive/folders/10AogvbfEZVkaiCpvq_A7Fl7d4oloFFyb?usp=drive_link" }
                 ]
             },
             {
@@ -371,8 +369,7 @@
                 avatarGradient: "from-blue-500 to-teal-500",
                 description: "Được đánh giá cao về tinh thần hợp tác, có các sản phẩm hình ảnh ấn tượng trong kho dữ liệu.",
                 links: [
-                    { label: "Drive Link Portfolio 1", url: "https://drive.google.com/drive/folders/1g6dBVO6um2TpEupcy6JqEw6MB6shaPxX" },
-                    { label: "Drive Link Portfolio 2", url: "https://drive.google.com/drive/folders/1MiqupcLL_ATCkivMJ-C3R_3lRnaizaFY" }
+                    { label: "Drive Link Portfolio", url: "https://drive.google.com/drive/folders/1g6dBVO6um2TpEupcy6JqEw6MB6shaPxX" }
                 ]
             },
             {
@@ -380,8 +377,17 @@
                 name: "HOÀNG THƯ",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-amber-600 to-yellow-500",
-                description: "Đầy đủ thông tin về kỹ năng, số đo chi tiết trong tệp văn bản đính kèm.",
-                links: [{ label: "Google Docs Chi Tiết", url: "https://docs.google.com/document/d/1CiLw8sbwujKVnNTJHkcwhbUkdapfralSztGXW-EtFHk/edit" }]
+                description: "Hồ sơ tuyển chọn mẫu chuyên nghiệp bao gồm video giới thiệu, các thư mục hình ảnh casting và loạt sản phẩm review TikTok.",
+                links: [
+                    { label: "Video Giới Thiệu (YouTube)", url: "https://youtu.be/VS1fYaiTlKw?si=D8ZP_L3gyNaUaBh5" },
+                    { label: "Drive Thư Mục Hình Ảnh 1", url: "https://drive.google.com/drive/mobile/folders/1PD0ri7" },
+                    { label: "Drive Thư Mục Hình Ảnh 2", url: "https://drive.google.com/drive/folders/1OtViS-oym8uPyQJ9kSdr7ZPF53-kK48P" },
+                    { label: "Mã Tài Nguyên Bổ Sung (Token)", url: "4tMyS-VQIjHeEeK0brrEzf3FAQ" },
+                    { label: "TikTok Clip Review 1", url: "https://vt.tiktok.com/ZSu6qTSNy/" },
+                    { label: "TikTok Clip Review 2", url: "https://vt.tiktok.com/ZSu6qa23R/" },
+                    { label: "TikTok Clip Review 3", url: "https://vt.tiktok.com/ZSu6qhDbu/" },
+                    { label: "TikTok Clip Review 4", url: "https://vt.tiktok.com/ZSu6qur2j/" }
+                ]
             },
             {
                 id: "quynh_trang",
@@ -668,27 +674,34 @@
                     <div>
                         <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3">TỆP HỒ SƠ & DỮ LIỆU ĐÃ XÁC MINH</h4>
                         <div class="space-y-3">
-                            ${talent.links.map(link => `
-                                <div class="bg-zinc-900/30 border border-zinc-900/80 rounded-xl p-4 flex items-center justify-between gap-4 hover:border-zinc-800 transition-all">
-                                    <div class="flex items-center gap-3">
-                                        <div class="h-9 w-9 rounded-lg bg-zinc-900 border border-zinc-850 flex items-center justify-center text-indigo-400">
-                                            <i class="fa-solid fa-cloud-arrow-down"></i>
+                            ${talent.links.map(link => {
+                                const isUrl = link.url.startsWith('http');
+                                return `
+                                    <div class="bg-zinc-900/30 border border-zinc-900/80 rounded-xl p-4 flex items-center justify-between gap-4 hover:border-zinc-800 transition-all">
+                                        <div class="flex items-center gap-3 min-w-0">
+                                            <div class="h-9 w-9 rounded-lg bg-zinc-900 border border-zinc-850 flex items-center justify-center text-indigo-400 flex-shrink-0">
+                                                <i class="${isUrl ? 'fa-solid fa-cloud-arrow-down' : 'fa-solid fa-key'}"></i>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <strong class="text-sm text-zinc-200 block truncate">${link.label}</strong>
+                                                <p class="text-[10px] text-zinc-500">${isUrl ? 'Cloud Link' : 'Mã Token / ID định danh'}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <strong class="text-sm text-zinc-200">${link.label}</strong>
-                                            <p class="text-[10px] text-zinc-500">Google Drive/Docs Cloud Link</p>
+                                        <div class="flex items-center gap-2 flex-shrink-0">
+                                            ${isUrl ? `
+                                                <a href="${link.url}" target="_blank" class="px-3.5 py-1.5 bg-brand-accentBlue/20 hover:bg-brand-accentBlue text-brand-accentBlue hover:text-white rounded-lg text-xs font-semibold border border-brand-accentBlue/30 hover:border-transparent transition-all flex items-center gap-1.5">
+                                                    Truy Cập Link <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                                </a>
+                                            ` : `
+                                                <span class="hidden sm:inline-block px-3.5 py-1.5 bg-zinc-900 text-zinc-400 rounded-lg text-xs font-mono border border-zinc-800 truncate max-w-[180px]">${link.url}</span>
+                                            `}
+                                            <button onclick="copyToClipboard('${link.url}')" class="h-8 w-8 rounded-lg bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-all" title="Copy Link">
+                                                <i class="fa-regular fa-copy"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="flex items-center gap-2">
-                                        <a href="${link.url}" target="_blank" class="px-3.5 py-1.5 bg-brand-accentBlue/20 hover:bg-brand-accentBlue text-brand-accentBlue hover:text-white rounded-lg text-xs font-semibold border border-brand-accentBlue/30 hover:border-transparent transition-all flex items-center gap-1.5">
-                                            Truy Cập Link <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                                        </a>
-                                        <button onclick="copyToClipboard('${link.url}')" class="h-8 w-8 rounded-lg bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-all" title="Copy Link">
-                                            <i class="fa-regular fa-copy"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            `).join('')}
+                                `;
+                            }).join('')}
                         </div>
                     </div>
                 `;
@@ -704,6 +717,7 @@
             }, 50);
         }
 
+        // CLOSE MODAL ACTIONS
         function closeModal() {
             const modal = document.getElementById('detail-modal');
             modal.classList.add('opacity-0');
