@@ -80,7 +80,7 @@
             <div class="flex items-center gap-3 text-xs">
                 <div class="bg-zinc-900/80 border border-zinc-850 rounded-lg px-3 py-1.5 flex items-center gap-2">
                     <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-zinc-400">Đang hoạt động: <strong class="text-white" id="total-count">19</strong></span>
+                    <span class="text-zinc-400">Đang hoạt động: <strong class="text-white" id="total-count">21</strong></span>
                 </div>
                 <button onclick="toggleShortlistFilter()" id="shortlist-btn" class="bg-zinc-900/80 hover:bg-zinc-850 border border-zinc-850 rounded-lg px-3 py-1.5 flex items-center gap-2 transition-all">
                     <i class="fa-solid fa-star text-amber-500"></i>
@@ -121,7 +121,7 @@
         </div>
 
         <!-- TALENT LIST CONTAINER (ROWS) -->
-        <div id="talent-list" class="flex flex-col gap-3.5">
+        <div id="talent-list" class="flex flex-col gap-4">
             <!-- Dynamic rows will be generated here -->
         </div>
 
@@ -142,7 +142,7 @@
             <!-- Modal Header -->
             <div class="px-6 py-4 border-b border-zinc-850/80 flex items-center justify-between bg-zinc-900/30">
                 <div class="flex items-center gap-3">
-                    <div id="modal-avatar" class="h-11 w-11 rounded-full flex items-center justify-center font-bold text-white shadow-inner"></div>
+                    <div id="modal-avatar" class="h-11 w-11 rounded-full flex items-center justify-center font-bold text-white shadow-inner overflow-hidden"></div>
                     <div>
                         <h3 id="modal-title" class="text-lg font-bold text-white tracking-wide"></h3>
                         <p id="modal-subtitle" class="text-xs text-zinc-400"></p>
@@ -163,6 +163,17 @@
                 <span>Vui lòng nhấn vào đường liên kết tương ứng để xem trực tiếp video/thư mục.</span>
                 <button onclick="closeModal()" class="px-4 py-2 bg-zinc-900 hover:bg-zinc-850 hover:text-white rounded-lg transition-all font-semibold">Đóng lại</button>
             </div>
+        </div>
+    </div>
+
+    <!-- IMAGE LIGHTBOX MODAL -->
+    <div id="image-modal" onclick="closeImageModal()" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0 cursor-pointer">
+        <div onclick="event.stopPropagation()" class="relative max-w-3xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-300 scale-95 cursor-default">
+            <button onclick="closeImageModal()" class="absolute -top-12 right-0 h-9 w-9 rounded-xl bg-zinc-900 hover:bg-zinc-850 text-zinc-400 hover:text-white flex items-center justify-center transition-all border border-zinc-800">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[75vh] rounded-xl object-contain border border-zinc-900 shadow-2xl">
+            <p id="lightbox-caption" class="text-sm font-bold text-white tracking-wider mt-4 uppercase text-center"></p>
         </div>
     </div>
 
@@ -189,13 +200,83 @@
 
     <!-- LOGIC SCRIPTS -->
     <script>
-        // CORE DATABASE
+        // CORE DATABASE WITH UPDATE PROFILE PICTURES
         const talentDatabase = [
+            {
+                id: "cat_phuong",
+                name: "CÁT PHƯỢNG",
+                tags: ["Model", "TVC"],
+                avatarGradient: "from-rose-500 to-purple-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEh8nARayRDqq483LfJMRSbftqiarG9-cRnxgVpWEUm3DmSAflrvt35jLWUiIW-sYa3B28AtFnXGFgOrrK7mvFbFisUaC7Rej97usPxqY9awWsS5_dvLawIfxD9XUxeSMZ3yY3mNOB9URgAKe5oVTbrDUzH0fTplDRSoUMAF4W8hpPyBbAKJdhF8Gx62Xeyo",
+                description: "Model chuyên nghiệp, mẫu TVC sở hữu biểu cảm tốt cùng kho lưu trữ hình ảnh casting đa dạng phong cách.",
+                links: [
+                    { label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/16KPWTer04Wd_SYzmERwCF2Yz--2LFTAw?usp=drive_link" }
+                ]
+            },
+            {
+                id: "nhu_quynh",
+                name: "NHƯ QUỲNH",
+                tags: ["Reviewer", "Model", "TVC"],
+                avatarGradient: "from-teal-500 to-emerald-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEiCm2XBDCGmHyf5IBthy2ps2ffKfKl6PPaZtYJCF2Qluoe_eeyWUVkwXPPjpxGuMGzIPwCuigUromWOfq0hqYC4ZNU1SeckukT1WukFqbOwNeJcbYWXr5-OiKCj4MpU8-Injdj9kRSVCW8qX_4-vQfMJLT3QRHYHz_bJEm1XxI-cRPDh9yq-wxKU4RWethW",
+                description: "Diễn viên, mẫu TVC, Reviewer đa năng chuyên nghiệp mảng Bất động sản, Mỹ phẩm, Công nghệ và Sức khỏe.",
+                links: [
+                    { label: "Drive Bất động sản", url: "https://drive.google.com/drive/folders/16fnZexNNst8gVffv2VayEu9VSDtBdCB7?usp=drive_link" },
+                    { label: "Drive Mỹ phẩm", url: "https://drive.google.com/drive/folders/13UJ-Sj3OQKVIANKJ2USd11OcZDYIDD39?usp=sharing" },
+                    { label: "Drive Công nghệ", url: "https://drive.google.com/drive/folders/1e0bghk5cPIGvRsSMDoInAgwWRIqbY9z7?usp=drive_link" },
+                    { label: "Drive Sức khỏe", url: "https://drive.google.com/drive/folders/1gyyyH9PaxZzAp_jBAhkeUMa_xVMVf6YG?usp=drive_link" }
+                ]
+            },
+            {
+                id: "tien_dy",
+                name: "TIÊN DY",
+                tags: ["Model", "TVC", "Diễn viên"],
+                avatarGradient: "from-pink-500 to-rose-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEgxA9BMPs1goN_s-8mso8gO6KO887oj5LLcHbdQCG3oHRuj3UfCOhhfQPJQRRgt_KRiDK2VkHFY-0g0kkDgxdncJ6yJnbp_qvCm00pd1D7pfJ132sFmhxzzRM7oXGQEGiscVeXCK40awQtWOQ3KE6Vzh8SSfGoiTt_fP_RzTGYUnVP3v_xbjqaUibfEU_JR",
+                description: "Nữ diễn viên, mẫu TVC tài năng sở hữu ngoại hình sáng cùng kho tác phẩm phong phú từ hài kịch, MV âm nhạc cho tới các thước phim quảng cáo cao cấp.",
+                campaigns: {
+                    "Quảng cáo": [
+                        { brand: "Facebook Reel 1", links: ["https://www.facebook.com/share/r/1Eb2fbQi6k/?mibextid=wwXIfr"] },
+                        { brand: "Facebook Reel 2", links: ["https://www.facebook.com/share/r/1BLcfAX2e8/?mibextid=wwXIfr"] },
+                        { brand: "Facebook Reel 3", links: ["https://www.facebook.com/share/r/1DofWN1Wvf/?"] },
+                        { brand: "Facebook Reel 4", links: ["https://www.facebook.com/share/r/18LKj94LPX/?"] },
+                        { brand: "Facebook Reel 5", links: ["https://www.facebook.com/share/r/1GSbnq9qGU/?"] },
+                        { brand: "Thư mục Drive Portfolio", links: ["https://drive.google.com/drive/folders/1klv7h73jZK__zDB64Jf3EMrxEVX1WoNs"] }
+                    ],
+                    "Clip hài": [
+                        { brand: "TikTok Comedy 1", links: ["https://vt.tiktok.com/ZSxorR6HD/"] },
+                        { brand: "Facebook Comedy 2", links: ["https://www.facebook.com/share/r/14ihgL3Uw2U/?"] },
+                        { brand: "Facebook Comedy 3", links: ["https://www.facebook.com/share/r/18nDN9S4Nw/?"] },
+                        { brand: "Facebook Video 4", links: ["https://www.facebook.com/share/v/1DgsK7kbVz/?"] },
+                        { brand: "TikTok Comedy 5", links: ["https://vt.tiktok.com/ZSxorMRv2/"] },
+                        { brand: "TikTok Comedy 6", links: ["https://vt.tiktok.com/ZSxor1dqP/"] }
+                    ],
+                    "Phim dài": [
+                        { brand: "Tác phẩm Phim 1", links: ["https://youtu.be/0JAD1ZX2Y9M?si=uũE0o5mK30C7nHC1"] },
+                        { brand: "Tác phẩm Phim 2", links: ["https://youtu.be/lVPDAKDGviQ?si=Y_JlSstNF3meêTYo"] },
+                        { brand: "Tác phẩm Phim 3", links: ["https://youtu.be/olZkoasSngA?si=wFmCHB_2ULxVGv3i"] }
+                    ],
+                    "Clip diễn": [
+                        { brand: "Diễn xuất TikTok 1", links: ["https://vt.tiktok.com/ZSxorTcem/"] },
+                        { brand: "Diễn xuất TikTok 2", links: ["https://vt.tiktok.com/ZSxorTTnp/"] },
+                        { brand: "Diễn xuất TikTok 3", links: ["https://vt.tiktok.com/ZSxohN1gJ/"] },
+                        { brand: "Diễn xuất TikTok 4", links: ["https://vt.tiktok.com/ZSxoh59uj/"] }
+                    ],
+                    "MV": [
+                        { brand: "Tác phẩm MV 1", links: ["https://youtu.be/bhIKUMEvLkI?si=9bJYM3YovNj2_It8"] },
+                        { brand: "Tác phẩm MV 2", links: ["https://youtu.be/cqqoVKbR1rY?si=q7913Ll10Bmm6BưE"] },
+                        { brand: "Tác phẩm MV 3", links: ["https://youtu.be/jMeyDVZSq2s?si=dn1S0YwBhaERiCh1"] },
+                        { brand: "Tác phẩm MV 4", links: ["https://youtu.be/k2gJ0nQIje4?si=A8ke_i5IC1_JmDGL"] },
+                        { brand: "Tác phẩm MV 5", links: ["https://youtu.be/BawLYqm2BxM?si=51k28m4CRYagAakA"] }
+                    ]
+                }
+            },
             {
                 id: "ngoc_tram",
                 name: "NGỌC TRÂM",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-blue-600 to-indigo-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEgCM-DTZyXUza-86RRsUZtvKdPPIINbsr4KHhOD3zMZx4-aiZMlpKWdAuYEcUMvaNjfBqrrTpOw4XHfM8Ujr9LoaqPNnqWVnN-lNIGW6eeGSC4Xpnzx0q9O3XDJDKr5orJ0UyYNWisxSklRL5R9vNqD-9ZKe_59FhGLGv1GsOdv311R4ruz-exZFiTQ7wWw",
                 description: "Gương mặt trẻ, triển vọng cho các chiến dịch hình ảnh thời trang và TVC giới thiệu sản phẩm cao cấp.",
                 links: [{ label: "Xem Drive Portfolio", url: "https://drive.google.com/drive/folders/1vQ2NrniZfgQLpZiFT7HuXQ_LRhRyyUMd" }]
             },
@@ -204,6 +285,7 @@
                 name: "TRÀ MY",
                 tags: ["Model", "Reviewer"],
                 avatarGradient: "from-purple-600 to-pink-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEjmsqfwDwm17uZDs1BH45KFbzH7_CbkvWEUbekOhCzFgP5v7RZFIR26N0m3mSTGGmWJBtXNylaGBb_sPPojx-Fcy3l7aLfG1gqOd3onTxutXDIz24a3Uz27OWCbkogw_z7etOuBnktqGNU0Cxei9lLn3UNyaDrEkmb8MQ53EHLpoy4LyeW1L_AGkLeTDnnG",
                 description: "Phong cách thanh lịch, biểu cảm tự nhiên tốt. Chuyên đóng các vai review, trải nghiệm thực tế.",
                 links: [
                     { label: "Liên kết diễn xuất 1", url: "https://drive.google.com/file/d/14Zoxsb-NXS1u47Kzyi99nDm9aL5ITNdV/view?usp=drivesdk" },
@@ -215,6 +297,7 @@
                 name: "PHƯƠNG NHUNG",
                 tags: ["MC", "Model", "Reviewer", "TVC"],
                 avatarGradient: "from-emerald-600 to-teal-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEhRmtVKv3geA_aZ9z94XSaAgTk7b4VOS3OwJjWZoOOr2djMUPRGeR7hdVWNPwpo0HPuuoXSYfrxmfK8GYW87Xi1FoKEduTFDSvK2IcYwUkwnQ2wIFwH3EcGuB9vfJ5AA31z5ZbKvdu-xKwWWd6iKblA5VZ6-mF-WNLQcwuk3bt7N3nmjbXeD7dk2i-4ZLqN",
                 description: "Diễn viên đa năng, MC bản lĩnh, sở hữu chất giọng miền Nam truyền cảm ứng và thu hút.",
                 height: "1m57",
                 weight: "45kg",
@@ -230,6 +313,7 @@
                 name: "TÔN NỮ BẢO TRÂM",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-amber-500 to-orange-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEi0DZfp0II29v7151nNrD-5sfBWC8bODIRUrreLZffSm1aPDj1yqxEuxp5NF5g9kFQ7s14aiZV71IOgrPdbNE_jjY_nz0Ay1g_MtCxQQhspZjuoOtjRdlt9tEmoK7G2qnFcTArUV_W_nWqXdF4bgzEWlIUgq2ltD-wcZn_s4gvmIik847FLWoBlr-nRXUS-",
                 description: "Ngoại hình sang trọng, phù hợp với các dòng sản phẩm thời trang, trang sức cao cấp và mỹ phẩm.",
                 links: [
                     { label: "Drive Thư Mục", url: "https://drive.google.com/drive/folders/10AogvbfEZVkaiCpvq_A7Fl7d4oloFFyb?usp=drive_link" }
@@ -240,6 +324,7 @@
                 name: "YẾN NGỌC",
                 tags: ["Model", "Reviewer"],
                 avatarGradient: "from-rose-500 to-red-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEjxm2QejxEU_valxy3zWe05TJqr7-1CBGGSqfdFg7xB0cMewNJghmyP2vDbNDa03dXeUvObb9VXxVYObdy0oFuzXMoWxqX3eRTFXNy0Oyk4qMhHEtKRUXx2l1gEBv0yMT8q8rJ-lC2QDMXqV6ZA0Q_gFnDFgZvgkSEYWIRlVM_cZ4D57fyO2FWbtf0WJY2s",
                 description: "Phong cách năng động, hiện đại. Thích hợp cho các dòng sản phẩm giới trẻ, phong cách đường phố.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1e0QB2vXFvh88U823v7fUroRZNAwik4Z1" }]
             },
@@ -248,6 +333,7 @@
                 name: "BÌNH PHƯƠNG",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-indigo-500 to-cyan-500",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEi4oEkXR5Xzgiyb7dcSU9kT9h48PrHtTZKXRu3RrHva_TkW1G9Yf56dK1EF7hxmLX_hdbzFTuT2FfwSu5PxB4JhNEkSQ6Rh7rO2yNsl1iA7IP0vJt5GK00tiRpOWb9pD8BcCfXSwpDb7tB-R0ZHiC8lSUSOqWH4hwfoVJ_vEScOl3Yo_q0NO2qtTLHIz6bs",
                 description: "Diễn xuất biểu cảm khuôn mặt tốt, thần thái xuất sắc trước ống kính máy quay.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1DSDvfLLwWzwpDTXNsVmx8LHBz-iUZdGv" }]
             },
@@ -256,6 +342,7 @@
                 name: "TƯỜNG MY",
                 tags: ["Model", "Reviewer", "TVC"],
                 avatarGradient: "from-fuchsia-600 to-pink-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEipOLomIE84Cw-6KAn_w1TNHFeuTefcqOPYVu7PFejQaIcjjiClVPsfoVuSN_RdbEmCLkcnvXW8aBkPnImyGXHnx8OaiuMQjk_DwUPa6DxZ3aeOJIw8Qx8nJ9cMalEbn4278k1vIZHPhaPJF91-FoEhCpl3KipoHzgKy2-wetPxd-trAzAHlFUXLmpnmzV5",
                 description: "Gương mặt khả ái, thiện cảm. Thường xuyên cộng tác cùng các nhãn hàng gia dụng, FMCG lớn.",
                 links: [{ label: "Drive Portfolio Link", url: "https://drive.google.com/drive/folders/1_w4UT2Syl7KCs67b7IVkmoCAyyimHmgB" }]
             },
@@ -264,6 +351,7 @@
                 name: "BẢO THƯ",
                 tags: ["Reviewer", "TVC", "MC"],
                 avatarGradient: "from-violet-600 to-indigo-700",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEi3S8_42psV6KWZ8EPiQWpQx4QIfobObPYjuMjL73MJyU1xTxiBBkKqtEMww_3QuzW441W4ns-6WaqUOCDxZE5JNcTV0WxXeZ_V0B_aA_bxev4K-biygZoq5wOJoIlx7uicsPmemMQRZH7m30aVF8OpkHGbuXL7KYWd6X_ssMAyh1K5MsLzZBBl3nq4KyNQ",
                 description: "Mega Reviewer thực lực với hơn 50+ dự án thành công cùng các tập đoàn lớn (Cuckoo, LOF, Ariel, Sunhouse, Huggies...).",
                 specialist: true,
                 campaigns: {
@@ -272,7 +360,7 @@
                         { brand: "LOF Vietnam", links: ["https://vt.tiktok.com/ZS6DCXBog/", "https://vt.tiktok.com/ZS65pn7ue/"] },
                         { brand: "Babyganics", links: ["https://vt.tiktok.com/ZS9eMaSkk/", "https://vt.tiktok.com/ZS9eMPsnw/", "https://vt.tiktok.com/ZS9eMAyqm/", "https://vt.tiktok.com/ZSmqKdVNV/", "https://vt.tiktok.com/ZSm77AraP/", "https://vt.tiktok.com/ZS9VJ2y8T/"] },
                         { brand: "Ariel", links: ["https://vt.tiktok.com/ZSU8WJ9q3/", "https://vt.tiktok.com/ZSU8WBQqX/"] },
-                        { brand: "Sunhouse", links: ["https://vt.tiktok.com/ZSDjKRGTa/", "https://vt.tiktok.com/ZSDjKDkk2/", "https://vt.tiktok.com/ZSDjKrAvK/", "https://vt.tiktok.com/ZS2rDVvsa/", "https://vt.tiktok.com/ZS2rDb7GL/", "https://vt.tiktok.com/ZSjf3m44B/"] },
+                        { brand: "Sunhouse", links: ["https://vt.tiktok.com/ZSDjKRGTa/", "https://vt.tiktok.com/ZSDjKDkk2/", "https://vt.tiktok.com/ZSDjKrAvK/", "ZS2rDVvsa/", "https://vt.tiktok.com/ZS2rDb7GL/", "https://vt.tiktok.com/ZSjf3m44B/"] },
                         { brand: "Huggies", links: ["https://vt.tiktok.com/ZS2rDPTdE/", "https://vt.tiktok.com/ZS2rDQHoq/"] }
                     ],
                     "Mỹ phẩm & Chăm sóc cá nhân": [
@@ -311,6 +399,7 @@
                 name: "NGỌC ÁNH LÊ",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-sky-500 to-blue-700",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEh4O1it2ujFS1YRZmjHT0A-10XyfIPXDxcRDc5CeuLt5vGzcnFwN2lYWIpjEiRrgTZf6KuLjff5pazG-uJE6Vz0XyoqmknxWME16yrbfn84tkpuAfyOZwvMnjyQ5L1zp4N5_RBva6w_4TgLsDLKa4iuiot01sWOPmbdIdXIO6A-xqcu7kRFfkWo0IOWV0B6",
                 description: "Ngoại hình sáng sân khấu, khả năng phối hợp trước ống kính xuất sắc và có tác phong làm việc chuyên nghiệp.",
                 links: [{ label: "Xem Drive Thư Mục", url: "https://drive.google.com/drive/folders/11EQjmqFjzt23Ns5TBOe8UkOVnneEx1b9" }]
             },
@@ -319,6 +408,7 @@
                 name: "THÙY QUYÊN",
                 tags: ["Model", "Reviewer"],
                 avatarGradient: "from-amber-600 to-rose-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEj6y6gfDVs4MZ5raspjIvfqHYsoxGo12rTvB9lbW1W5Umi-GemUGFZDwPx85--OLByKIuadyJ0EHW_ny7yx_e6urGhlQcgJ4Lei1vXVYyZne2nWVo9I9DpverMnT9EOnkchWJ7IlKIq23-fmRdD4Kc_oOOu1WJTF4jos8sPlnds3U-Ey8lT32dUpVv9hIQo",
                 description: "Sở hữu vẻ đẹp ngọt ngào, phù hợp cho các chiến dịch quay chụp mảng Mỹ phẩm, Beauty & Skincare.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1WuakIXq90w0_sfVMWY8df5XeTEOLWX8n" }]
             },
@@ -327,6 +417,7 @@
                 name: "KIỀU DIỄM",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-teal-500 to-indigo-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEiNdR6VHsziTRXuYFMQkW_8hlnidFhpZ-3tRSx3HnM9Ei3iVKbEkQUF5rlBlMy__TCCpWhE0yw6hlBhBcipcCI9m4_Tfqc1ZPAssPRYPNRjs-qxmS0BV9ViDHlAxEKkY2em3jy64xnf1KnonrWPiYu02yhDG2GvCs55AMWMVb_gw997FnbBVKffiQa9PaeL",
                 description: "Gương mặt góc cạnh, ăn ảnh phù hợp các concept lookbook cá tính độc đáo hoặc quay quảng cáo.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1QwZ0C9g6kottpfbYbZ3GXBWhDEFI9NpJ" }]
             },
@@ -335,6 +426,7 @@
                 name: "ANH THY",
                 tags: ["Model", "Reviewer"],
                 avatarGradient: "from-emerald-500 to-cyan-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEjsHmOhGYQoaUbfB-jelD4Ao0ev3IRAGHTB5W5NLqFgQ_sWM-AtHkOjK_ZsdL-wiZIWf89gWEKXBqnGicf4_MS6FGrFWJ-09nGhNRFvZXOny0k559DAbJjX6s1isUnZaOcudQ9-sXaXuzCU9TX3YDh4FwZyFmJfRCfKvtYm0Tk0rBvZLIDKoggmL4104kzF",
                 description: "KOL/Model trẻ trung tích cực, có kỹ năng tương tác tốt, giọng nói dễ mến trước máy quay.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/114YnAUWd-GtpEKTkXtMBkWJ8BjYkCWkr" }]
             },
@@ -343,6 +435,7 @@
                 name: "THU HIỀN",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-orange-500 to-red-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEg0Vq-YhJ0NtU_wqH95AwkQdzLsWI4i1ManWJ6TeMwrNf4Av-ltg3Brft9gXAlFXlQXkkzUJVmOzw7wZB6JnmL15ajJiyLJdgoKJTV4ktdp61wwsa5o8MlP5U96xCYcdfvrJVl3MudzM8qQOtZZP8tVelxokxp17CNtFIQ4mGuDSIZV30ftceo5NE9ScmXz",
                 description: "Đóng vai tốt các biểu cảm tâm lý, phù hợp diễn viên TVC ngắn hoặc phim quảng cáo thương hiệu.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1-CkZoqVmQ8qM7A0OTJqIA-rlzuMtwd7Y" }]
             },
@@ -351,6 +444,7 @@
                 name: "NGUYỄN PHƯƠNG ANH",
                 tags: ["Model", "Reviewer"],
                 avatarGradient: "from-purple-500 to-indigo-600",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEhj7KjWEx0r93qff_KHXY39XHd2OkicfA2NVNrXmL4-T6ZHTHIETaP65PhxF1XlEzRulVxEBTZrJsnPQcpT69ocAXtO0CQfD1PoSFtGwOqEszn8IvyZ4BnqTUJDdj1Qncu9VOduiZUc4z6gfERYrRpFM77-GjpZ_RSvU4D9n8WDbJ7c_IjDZqstVSTcRmQL",
                 description: "Luôn tràn đầy năng lượng tươi mới, đáp ứng linh hoạt các yêu cầu sản xuất nội dung mạng xã hội.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1fMFEMHDRh30a6-JZK64eovBSzZTpAuCk" }]
             },
@@ -359,6 +453,7 @@
                 name: "NGUYỄN THỊ PHỤNG",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-pink-500 to-rose-700",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEj3JY1nHzfrs1VMpu7RHH4-FNIjUC-z14hAQf3Zp5Zatk8Zw9rdR2MYDC6tpfzk6I87g_LfK-yZgb3lu4lL1aI838A27wlcWaTb3rkdCq6WHduPmQ2pC7Gdbng9QuDLbj1UwiWVx8Zi5yg3PvRrVjLBzUqOIM2JOOmjycfQpEdKCI81VFHDFpBdKd-E5kOs",
                 description: "Sở hữu cá tính độc lập, tác phong năng nổ, là nhân tố tiềm năng cho mọi buổi casting chụp hình.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1X9KPzdgVRXdxsg8RSszLTqBKiT-oSSPM?usp=drive_link" }]
             },
@@ -367,6 +462,7 @@
                 name: "HÀ TRANG",
                 tags: ["Model", "Reviewer", "TVC"],
                 avatarGradient: "from-blue-500 to-teal-500",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEhzsG5YbsRip_Hf3Ua3yd55L9ICGkxUKfUpsQ-gAigMefUE36c-_c6nghV_LmA3dk8RqS7f2WIa9CVFakU59CQ0EwduRqRj9UAFmQ0eAlIWss3Yd1fNlNvs1m9lptAZJAufRd59nCRzSEJQothxvqpBjNB8Rwa-YggxtSDCDHxnk2zsvsum1iMfp5F281Ew",
                 description: "Được đánh giá cao về tinh thần hợp tác, có các sản phẩm hình ảnh ấn tượng trong kho dữ liệu.",
                 links: [
                     { label: "Drive Link Portfolio", url: "https://drive.google.com/drive/folders/1g6dBVO6um2TpEupcy6JqEw6MB6shaPxX" }
@@ -377,6 +473,7 @@
                 name: "HOÀNG THƯ",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-amber-600 to-yellow-500",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEh1iNpH69CbeD4iEsonKKWGhx2tAu5TfmLdbyBXko7Fl9yJtkoA0tBeiqvn7birwDzUZlOM1xwckJ8p9vD5VhuWE50QyWr9FaqymhxajYF_cW9ktAfpOfFZ_-8rIARJtcYYWMqyHUYPTUXbbCpD8az0AtjnYX2MHqyIhOjumbDGqR169BdXPJHK0KNJWTQK",
                 description: "Hồ sơ tuyển chọn mẫu chuyên nghiệp bao gồm video giới thiệu, các thư mục hình ảnh casting và loạt sản phẩm review TikTok.",
                 links: [
                     { label: "Video Giới Thiệu (YouTube)", url: "https://youtu.be/VS1fYaiTlKw?si=D8ZP_L3gyNaUaBh5" },
@@ -394,6 +491,7 @@
                 name: "QUỲNH TRANG",
                 tags: ["Model", "Reviewer"],
                 avatarGradient: "from-indigo-600 to-purple-700",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEhR0Bm_dKxRzNcpeGsstP8fEgqcIoReITCUGSTuPqZmh9qKiLlUFaypRTAQhU2XK-MVlJQOhfdmX3VFhYZTI8gTd2j3F0TqJiKiDs2v51RTsSZ0sBtGGkedsoy-f6_L6t9ZeheaGwVBkl8qVi5SzGB1a0JPijJ-viiHLoJTXSw7SgonTNpIIQo16gk7d355",
                 description: "Có phong thái độc đáo, chuyên nghiệp khi thực hiện các chiến dịch hình ảnh sáng tạo đột phá.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1MiqupcLL_ATCkivMJ-C3R_3lRnaizaFY" }]
             }
@@ -417,9 +515,8 @@
             listContainer.innerHTML = "";
 
             const filtered = talentDatabase.filter(talent => {
-                // Search matching
+                // Search matching (excluding description field to ensure focus on branding and metadata)
                 const matchesSearch = talent.name.toLowerCase().includes(currentSearchQuery.toLowerCase()) || 
-                    (talent.description && talent.description.toLowerCase().includes(currentSearchQuery.toLowerCase())) ||
                     (talent.experience && talent.experience.toLowerCase().includes(currentSearchQuery.toLowerCase())) ||
                     JSON.stringify(talent.campaigns || {}).toLowerCase().includes(currentSearchQuery.toLowerCase());
 
@@ -439,75 +536,78 @@
                 filtered.forEach(talent => {
                     const isShortlisted = shortlistedTalents.includes(talent.id);
                     const row = document.createElement('div');
-                    row.className = "bg-brand-cardBg border border-zinc-900/80 hover:border-zinc-800/80 rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 transition-all duration-300 hover:shadow-xl hover:shadow-brand-accentBlue/[0.02] relative group";
+                    row.className = "bg-brand-cardBg border border-zinc-900/80 hover:border-zinc-800/80 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 transition-all duration-300 hover:shadow-2xl hover:shadow-brand-accentBlue/[0.01] relative group";
                     
                     // Generate Initials Avatar
                     const initials = talent.name.split(' ').map(n => n[0]).join('').substring(0, 2);
 
-                    row.innerHTML = `
-                        <!-- Avatar + Basic Info Section -->
-                        <div class="flex items-center gap-4 flex-1 min-w-0">
-                            <!-- Premium Avatar & Favorite Toggle inside -->
-                            <div class="relative flex-shrink-0">
-                                <div class="h-14 w-14 rounded-full bg-gradient-to-tr ${talent.avatarGradient} flex items-center justify-center font-extrabold text-white text-base tracking-wider border border-zinc-800/60 shadow-inner">
-                                    ${initials}
-                                </div>
-                                <button onclick="event.stopPropagation(); toggleShortlist('${talent.id}')" 
-                                    class="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-black border border-zinc-800 flex items-center justify-center text-[10px] text-zinc-400 hover:text-amber-500 transition-colors z-10 shadow-md"
-                                    title="Lưu Talent">
-                                    <i class="${isShortlisted ? 'fa-solid text-amber-500' : 'fa-regular'} fa-star"></i>
-                                </button>
-                            </div>
+                    // Premium Large Image Display with interactive zoom action
+                    const imageMarkup = talent.imageUrl 
+                        ? `<div class="relative w-full max-w-sm h-96 rounded-xl border border-zinc-850/60 shadow-lg overflow-hidden bg-zinc-950 flex-shrink-0 cursor-zoom-in" onclick="openImageModal('${talent.imageUrl}', '${talent.name}')">
+                               <img src="${talent.imageUrl}" alt="${talent.name}" class="h-full w-full object-cover object-top transition-transform duration-500 hover:scale-105" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-full w-full bg-gradient-to-tr ${talent.avatarGradient} flex items-center justify-center font-extrabold text-white text-5xl tracking-wider\\'>${initials}</div>';">
+                               <!-- Star floating inside image -->
+                               <button onclick="event.stopPropagation(); toggleShortlist('${talent.id}')" 
+                                   class="absolute top-3 right-3 h-9 w-9 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md border border-zinc-800/80 flex items-center justify-center text-zinc-300 hover:text-amber-500 transition-colors z-10 shadow-lg"
+                                   title="Lưu Talent">
+                                   <i class="${isShortlisted ? 'fa-solid text-amber-500 text-sm' : 'fa-regular text-sm'} fa-star"></i>
+                               </button>
+                           </div>`
+                        : `<div class="relative w-full max-w-sm h-96 rounded-xl bg-gradient-to-tr ${talent.avatarGradient} flex items-center justify-center font-black text-white text-5xl tracking-wider border border-zinc-850/60 shadow-lg flex-shrink-0">
+                               ${initials}
+                               <!-- Star floating inside image -->
+                               <button onclick="event.stopPropagation(); toggleShortlist('${talent.id}')" 
+                                   class="absolute top-3 right-3 h-9 w-9 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md border border-zinc-800/80 flex items-center justify-center text-zinc-300 hover:text-amber-500 transition-colors z-10 shadow-lg"
+                                   title="Lưu Talent">
+                                   <i class="${isShortlisted ? 'fa-solid text-amber-500 text-sm' : 'fa-regular text-sm'} fa-star"></i>
+                               </button>
+                           </div>`;
 
-                            <!-- Name & Roles & Bio -->
-                            <div class="min-w-0 flex-1">
-                                <div class="flex flex-wrap items-center gap-2 mb-1">
-                                    <h3 class="text-base font-bold text-white tracking-wide group-hover:text-brand-accentBlue/90 transition-colors">${talent.name}</h3>
+                    row.innerHTML = `
+                        <!-- Left Info Block: Name, Tags, Large Image underneath -->
+                        <div class="flex flex-col gap-4 flex-grow w-full md:max-w-xl">
+                            <div>
+                                <!-- Name & Specialist Badges -->
+                                <div class="flex flex-wrap items-center gap-3 mb-2">
+                                    <h3 class="text-xl font-bold text-white tracking-wide group-hover:text-brand-accentBlue/90 transition-colors">${talent.name}</h3>
                                     ${talent.specialist ? `
-                                        <span class="px-2 py-0.5 rounded bg-amber-950/40 border border-amber-900/30 text-amber-400 text-[9px] font-bold uppercase tracking-wider">Top Review</span>
+                                        <span class="px-2.5 py-0.5 rounded-full bg-amber-950/40 border border-amber-900/30 text-amber-400 text-[9px] font-bold uppercase tracking-wider">Top Review</span>
                                     ` : ''}
                                 </div>
                                 
                                 <!-- Tags -->
-                                <div class="flex flex-wrap gap-1.5 mb-2.5">
+                                <div class="flex flex-wrap gap-1.5">
                                     ${talent.tags.map(tag => `
-                                        <span class="px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-850 text-[10px] font-medium">${tag}</span>
+                                        <span class="px-2.5 py-0.5 rounded-lg bg-zinc-900 text-zinc-400 border border-zinc-850 text-[10px] font-semibold">${tag}</span>
                                     `).join('')}
                                 </div>
-
-                                <!-- Description -->
-                                <p class="text-xs text-zinc-400 leading-relaxed line-clamp-2 md:line-clamp-1 max-w-2xl">
-                                    ${talent.description}
-                                </p>
                             </div>
+
+                            <!-- Large Image Right Under Name -->
+                            ${imageMarkup}
                         </div>
 
-                        <!-- Info Metadata columns (Desktop only divider style) -->
-                        <div class="flex flex-wrap items-center gap-4 sm:gap-6 md:border-l md:border-zinc-900 md:pl-6 min-w-[160px]">
-                            ${talent.height ? `
-                                <div class="text-[11px] text-zinc-500">
-                                    <span class="block text-[10px] text-zinc-600 uppercase font-bold tracking-wider mb-0.5">Số đo</span>
-                                    <strong class="text-zinc-300 font-semibold">${talent.height} | ${talent.weight}</strong>
+                        <!-- Right block: Stats metadata (Height & Resources only, Voice removed) & Actions -->
+                        <div class="flex flex-col sm:flex-row md:flex-col items-start md:items-end justify-between md:justify-center gap-6 w-full md:w-auto md:border-l md:border-zinc-900 md:pl-8 h-full">
+                            <!-- Info Metadata columns -->
+                            <div class="flex flex-row md:flex-col gap-6 w-full sm:w-auto">
+                                ${talent.height ? `
+                                    <div class="text-xs text-zinc-500 min-w-[100px] md:text-right">
+                                        <span class="block text-[10px] text-zinc-600 uppercase font-bold tracking-wider mb-1">Số đo hình thể</span>
+                                        <strong class="text-zinc-200 font-bold text-sm whitespace-nowrap">${talent.height} | ${talent.weight}</strong>
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="text-xs text-zinc-500 min-w-[100px] md:text-right">
+                                    <span class="block text-[10px] text-zinc-600 uppercase font-bold tracking-wider mb-1">Tài nguyên</span>
+                                    <strong class="text-brand-gold font-bold text-sm whitespace-nowrap">
+                                        ${talent.campaigns ? '50+ Dự án' : (talent.links.length + ' Tệp tin')}
+                                    </strong>
                                 </div>
-                            ` : `
-                                <div class="text-[11px] text-zinc-500">
-                                    <span class="block text-[10px] text-zinc-600 uppercase font-bold tracking-wider mb-0.5">Chất giọng</span>
-                                    <strong class="text-zinc-300 font-semibold">${talent.voice || 'Miền Nam'}</strong>
-                                </div>
-                            `}
-                            
-                            <div class="text-[11px] text-zinc-500">
-                                <span class="block text-[10px] text-zinc-600 uppercase font-bold tracking-wider mb-0.5">Tài nguyên</span>
-                                <strong class="text-brand-gold font-semibold">
-                                    ${talent.campaigns ? '50+ Dự án' : (talent.links.length + ' Tệp tin')}
-                                </strong>
                             </div>
-                        </div>
 
-                        <!-- CTA Actions -->
-                        <div class="flex items-center gap-2 md:border-l md:border-zinc-900 md:pl-6 justify-end flex-shrink-0">
+                            <!-- CTA Action Button -->
                             <button onclick="openDetailModal('${talent.id}')" 
-                                class="w-full sm:w-auto px-4 py-2.5 bg-zinc-900/80 hover:bg-zinc-850 text-zinc-200 hover:text-white rounded-xl text-xs font-semibold border border-zinc-800 hover:border-zinc-700 transition-all flex items-center justify-center gap-1.5 whitespace-nowrap">
+                                class="w-full sm:w-auto px-5 py-3 bg-zinc-900/80 hover:bg-zinc-850 text-zinc-100 hover:text-white rounded-xl text-xs font-semibold border border-zinc-800 hover:border-zinc-700 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                                 Xem Chi Tiết <i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
@@ -523,12 +623,14 @@
             renderTalents();
         }
 
+        // CLEAR SEARCH
         function clearSearch() {
             document.getElementById('search-input').value = "";
             currentSearchQuery = "";
             renderTalents();
         }
 
+        // SHORTLIST TOGGLE
         function toggleShortlistFilter() {
             onlyShowShortlist = !onlyShowShortlist;
             const btn = document.getElementById('shortlist-btn');
@@ -555,12 +657,13 @@
             renderTalents();
         }
 
+        // AUTO-CALCULATE AND RENDER DATABASE TOTAL LENGTH
         function updateStats() {
             document.getElementById('shortlist-count').innerText = shortlistedTalents.length;
             document.getElementById('total-count').innerText = talentDatabase.length;
         }
 
-        // DETAILED MODAL ACTIONS
+        // DETAILED MODAL ACTIONS (Description and Voice features completely removed)
         function openDetailModal(id) {
             const talent = talentDatabase.find(t => t.id === id);
             if (!talent) return;
@@ -574,24 +677,38 @@
             // Setup Header
             title.innerText = talent.name;
             subtitle.innerHTML = talent.tags.map(tag => `#${tag}`).join('  ');
-            avatar.className = `h-11 w-11 rounded-full bg-gradient-to-tr ${talent.avatarGradient} flex items-center justify-center font-extrabold text-white text-base shadow-md`;
-            avatar.innerText = talent.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+            
+            const modalInitials = talent.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+            avatar.className = `h-11 w-11 rounded-full flex items-center justify-center font-extrabold text-white text-base shadow-md overflow-hidden bg-zinc-900 flex-shrink-0 relative`;
+            
+            if (talent.imageUrl) {
+                avatar.innerHTML = `<img src="${talent.imageUrl}" alt="${talent.name}" class="h-full w-full object-cover" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-full w-full bg-gradient-to-tr ${talent.avatarGradient} flex items-center justify-center font-extrabold text-white text-sm tracking-wider\\'>${modalInitials}</div>';">`;
+            } else {
+                avatar.innerHTML = `<div class="h-full w-full bg-gradient-to-tr ${talent.avatarGradient} flex items-center justify-center font-extrabold text-white text-sm tracking-wider">${modalInitials}</div>`;
+            }
 
             // Construct Content Body
             let bodyHTML = "";
 
-            // Biometrics / Bio
-            if (talent.height || talent.experience) {
+            // Biometrics / Bio (Voice blocks are completely excluded)
+            if (talent.height) {
                 bodyHTML += `
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 pb-6 border-b border-zinc-900">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 pb-6 border-b border-zinc-900">
                         <div class="bg-zinc-900/40 p-4 rounded-xl border border-zinc-900 text-center md:text-left">
                             <span class="text-xs text-zinc-500 block mb-1">Số đo hình thể</span>
-                            <span class="text-sm font-semibold text-zinc-200">Chiều cao: ${talent.height || 'Chưa cập nhật'} | Cân nặng: ${talent.weight || 'Chưa cập nhật'}</span>
+                            <span class="text-sm font-semibold text-zinc-200">Chiều cao: ${talent.height} | Cân nặng: ${talent.weight}</span>
                         </div>
                         <div class="bg-zinc-900/40 p-4 rounded-xl border border-zinc-900 text-center md:text-left">
-                            <span class="text-xs text-zinc-500 block mb-1">Chất giọng đặc trưng</span>
-                            <span class="text-sm font-semibold text-zinc-200">${talent.voice || 'Giọng miền Nam'}</span>
+                            <span class="text-xs text-zinc-500 block mb-1">Tài nguyên hiện có</span>
+                            <span class="text-sm font-semibold text-brand-gold">
+                                ${talent.campaigns ? 'Hơn 50+ clip review' : (talent.links.length + ' Tệp tin lớn')}
+                            </span>
                         </div>
+                    </div>
+                `;
+            } else {
+                bodyHTML += `
+                    <div class="grid grid-cols-1 gap-4 mb-6 pb-6 border-b border-zinc-900">
                         <div class="bg-zinc-900/40 p-4 rounded-xl border border-zinc-900 text-center md:text-left">
                             <span class="text-xs text-zinc-500 block mb-1">Tài nguyên hiện có</span>
                             <span class="text-sm font-semibold text-brand-gold">
@@ -602,7 +719,7 @@
                 `;
             }
 
-            // Experience Text block
+            // Experience Text block (If present)
             if (talent.experience) {
                 bodyHTML += `
                     <div class="mb-6">
@@ -646,7 +763,7 @@
                                                 </div>
                                                 <div>
                                                     <strong class="text-zinc-200 text-sm">${item.brand}</strong>
-                                                    <p class="text-[10px] text-zinc-500">Video review thực phẩm / sản phẩm</p>
+                                                    <p class="text-[10px] text-zinc-500">Video review thực phẩm / sản phẩm / tác phẩm</p>
                                                 </div>
                                             </div>
                                             <div class="flex flex-wrap gap-2 w-full sm:w-auto">
@@ -722,6 +839,31 @@
             const modal = document.getElementById('detail-modal');
             modal.classList.add('opacity-0');
             modal.querySelector('.max-w-4xl').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // LIGHTBOX IMAGE MODAL ACTIONS
+        function openImageModal(url, name) {
+            if (!url) return;
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('lightbox-img');
+            const caption = document.getElementById('lightbox-caption');
+
+            img.src = url;
+            img.alt = name;
+            caption.innerText = name;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 50);
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.add('opacity-0');
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
