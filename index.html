@@ -197,7 +197,7 @@
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed bottom-6 left-6 right-6 sm:left-auto sm:right-6 bg-emerald-600/95 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-lg border border-emerald-500/30 flex items-center justify-center sm:justify-start gap-2.5 translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <div id="toast" class="fixed bottom-6 right-6 bg-emerald-600/95 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-lg border border-emerald-500/30 flex items-center gap-2.5 translate-y-20 opacity-0 transition-all duration-300 z-50">
         <i class="fa-solid fa-circle-check"></i>
         <span class="text-xs font-semibold" id="toast-msg">Đã sao chép!</span>
     </div>
@@ -436,7 +436,7 @@
                 name: "KIỀU DIỄM",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-teal-500 to-indigo-600",
-                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEiNdR6VHsziTRXuYFMQkW_8hlnidFhpZ-3tRSx3HnM9Ei3iVKbEkQUF5rlBlMy__TCCpWhE0yw6hlBhBcipcCI9m4_Tfqc1ZPAssPRYPNRjs-qxmS0BV9ViDHlAxEKkY2em3jy64xnf1KnonrWPiYu02yhDG2GvCs55AMWMVb_gw997FnbBVKffiQa9PaeL",
+                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEhCvWUZSUCTABzZY-RjWC4HjxqWFRbC-J4qmh9TKSLa6m7PDnJGfVomVJFeX7-yWeZa4zqQqY31zrrJWhsyLlCNOhnE6VMRTVIRunJgY1NBnR7_EhyUxldOO-5iQUPOxbLXyiy4hEotf_IsGDE2ERfM9g8_Co5GLhOQVEthGJp4dZkF2PGVPhGAfC9WOLxO",
                 description: "Gương mặt góc cạnh, ăn ảnh phù hợp các concept lookbook cá tính độc đáo hoặc quay quảng cáo.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1QwZ0C9g6kottpfbYbZ3GXBWhDEFI9NpJ" }]
             },
@@ -472,7 +472,7 @@
                 name: "NGUYỄN THỊ PHỤNG",
                 tags: ["Model", "TVC"],
                 avatarGradient: "from-pink-500 to-rose-700",
-                imageUrl: "https://blogger.googleusercontent.com/img/a/AVvXsEg3JY1nHzfrs1VMpu7RHH4-FNIjUC-z14hAQf3Zp5Zatk8Zw9rdR2MYDC6tpfzk6I87g_LfK-yZgb3lu4lL1aI838A27wlcWaTb3rkdCq6WHduPmQ2pC7Gdbng9QuDLbj1UwiWVx8Zi5yg3PvRrVjLBzUqOIM2JOOmjycfQpEdKCI81VFHDFpBdKd-E5kOs",
+                imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
                 description: "Sở hữu cá tính độc lập, tác phong năng nổ, là nhân tố tiềm năng cho mọi buổi casting chụp hình.",
                 links: [{ label: "Xem Thư Mục Drive", url: "https://drive.google.com/drive/folders/1X9KPzdgVRXdxsg8RSszLTqBKiT-oSSPM?usp=drive_link" }]
             },
@@ -552,13 +552,6 @@
                 btn.classList.remove('opacity-100', 'translate-y-0');
             }
         });
-
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
 
         // RENDER TALENT LIST IN ROW VIEW (Optimized for Mobile/Desktop layout)
         function renderTalents() {
@@ -750,9 +743,9 @@
                             <span class="text-[10px] sm:text-xs text-zinc-500 block mb-0.5 sm:mb-1">Số đo hình thể</span>
                             <span class="text-xs sm:text-sm font-semibold text-zinc-200">Chiều cao: ${talent.height} | Cân nặng: ${talent.weight}</span>
                         </div>
-                        <div class="bg-zinc-900/40 p-3.5 sm:p-4 rounded-xl border border-zinc-900 text-center sm:text-left">
-                            <span class="text-[10px] sm:text-xs text-zinc-500 block mb-0.5 sm:mb-1">Tài nguyên hiện có</span>
-                            <span class="text-xs sm:text-sm font-semibold text-brand-gold">
+                        <div class="bg-zinc-900/40 p-4 rounded-xl border border-zinc-900 text-center sm:text-left">
+                            <span class="text-xs text-zinc-500 block mb-1">Tài nguyên hiện có</span>
+                            <span class="text-sm font-semibold text-brand-gold">
                                 ${talent.campaigns ? 'Hơn 50+ clip review' : (talent.links.length + ' Tệp tin lớn')}
                             </span>
                         </div>
@@ -917,14 +910,6 @@
             }, 50);
         }
 
-        function closeImageModal() {
-            const modal = document.getElementById('image-modal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
         // Inside Modal Campaign Tab Switch
         function switchCampaignTab(selectedTab) {
             document.querySelectorAll('.campaign-tab-btn').forEach(btn => {
@@ -959,11 +944,26 @@
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
-            toast.className = "fixed bottom-6 left-6 right-6 sm:left-auto sm:right-6 bg-emerald-600/95 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-lg border border-emerald-500/30 flex items-center justify-center sm:justify-start gap-2.5 translate-y-0 opacity-100 transition-all duration-300 z-50";
+            toast.className = "fixed bottom-6 right-6 bg-emerald-600/95 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-lg border border-emerald-500/30 flex items-center gap-2.5 translate-y-0 opacity-100 transition-all duration-300 z-50";
             
             setTimeout(() => {
-                toast.className = "fixed bottom-6 left-6 right-6 sm:left-auto sm:right-6 bg-emerald-600/90 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-lg border border-emerald-500/30 flex items-center justify-center sm:justify-start gap-2.5 translate-y-20 opacity-0 transition-all duration-300 z-50";
+                toast.className = "fixed bottom-6 right-6 bg-emerald-600/90 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-lg border border-emerald-500/30 flex items-center gap-2.5 translate-y-20 opacity-0 transition-all duration-300 z-50";
             }, 2300);
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
